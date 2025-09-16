@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<div class="content" style="
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    height: 100%;"
+>
+    <h2>Joke Of the day</h2>
+    <button id="getJokeBtn">Get a Joke</button>
+    <div id="jokeDisplay" class="data-display"></div>    
+</div>
+
+<script>
+    async function fetchData(url, displayElementid) {
+        const displayElementid = document.getElementById(displayElementid);
+        displayElementid.textContent = 'Loading....';
+
+        try {
+            const response =  await fetch(url);
+            if (!response.ok) {
+                throw new Error('HTTP erro! status: ${response.status}');
+            }
+            const data = await response.json();
+            displayElementid.innerHTML = '';
+            
+            for (const key in data) {
+                const p = document.createElement('p');
+                p.textContent = `${key}: ${data[key]}`;
+                displayElement.appendChild(p);
+            }
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+            displayElement.textContent = `Error: ${error.message}`;
+        }
+    }
+
+    document.getElementById('getJokeBtn').addEvenListener('click',() => {
+        fetchData('/get_joke', 'jokeDisplay')
+    });
+</script>
+</body>
+</html>
